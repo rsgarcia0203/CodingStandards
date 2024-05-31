@@ -25,7 +25,11 @@ public class SumTheTotal {
 
         totalCost = totalCost - (totalCost * discount);
 
-        // TODO: Add more discounts based on total cost in requirements
+        if (totalCost > 50) {
+            totalCost = totalCost - 10;
+        } else if (totalCost > 100) {
+            totalCost = totalCost - 25;
+        }
 
         return totalCost;
     }

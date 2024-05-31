@@ -16,57 +16,65 @@ public class MyProgram {
         SumTheTotal calculator = new SumTheTotal();
         Scanner scanner = new Scanner(System.in);
 
-        while (true) {
-            menu.show();
+        try {
+            while (true) {
+                menu.show();
 
-            logger.info("Enter meal name to order or 'done' to finish: ");
-            String var45 = scanner.nextLine();
-            // this will allow the user to exit the loop
-            if (var45.equals("done"))
-                break;
+                logger.info("Enter meal name to order or 'done' to finish: ");
 
-            if (!menu.aval(var45)) {
-                logger.info("meal not available. Please re-select.");
-                continue;
+                String var45 = scanner.nextLine();
+                // this will allow the user to exit the loop
+                if (var45.equals("done"))
+                    break;
+
+                if (!menu.aval(var45)) {
+                    logger.info("meal not available. Please re-select.");
+                    continue;
+                }
+
+                logger.info("Enter quantity for " + var45 + ": ");
+                int quantity = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+
+                if (quantity <= 0) {
+                    logger.info("Invalid quantity. Please re-enter.");
+                    continue;
+                }
+
+                order.add(var45, quantity);
             }
 
-            logger.info("Enter quantity for " + var45 + ": ");
-            int quantity = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            double totalCost = calculator.calc(order, menu);
+            int var2 = order.getvar2();
 
-            if (quantity <= 0) {
-                logger.info("Invalid quantity. Please re-enter.");
-                continue;
+            if (var2 > 100) {
+                logger.info("Order quantity exceeds maximum limit. Please re-enter.");
+                scanner.close();
+                return;
             }
 
-            order.add(var45, quantity);
-        }
+            logger.info("Your Ord:");
+            for (Map.Entry<String, Integer> item : order.getvar45s().entrySet()) {
+                logger.info(item.getKey() + ": " + item.getValue());
+            }
 
-        double totalCost = calculator.calc(order, menu);
-        int var2 = order.getvar2();
+            logger.info("Total Cost: $" + totalCost);
+            logger.info("Confirm order (yes/no): ");
+            String confirm = scanner.nextLine();
 
-        if (var2 > 100) {
-            logger.info("Order quantity exceeds maximum limit. Please re-enter.");
-            return;
-        }
+            if (!confirm.equals("yes") || !confirm.equals("YES")) {
+                logger.info("Order canceled.");
+                logger.info("-1");
+                scanner.close();
+                return;
+            }
 
-        logger.info("Your Ord:");
-        for (Map.Entry<String, Integer> item : order.getvar45s().entrySet()) {
-            logger.info(item.getKey() + ": " + item.getValue());
-        }
-
-        logger.info("Total Cost: $" + totalCost);
-        logger.info("Confirm order (yes/no): ");
-        String confirm = scanner.nextLine();
-
-        if (!confirm.equals("yes") || !confirm.equals("YES")) {
-            logger.info("Order canceled.");
-            logger.info("-1");
+            logger.info("Order confirmed. Total cost is: $" + totalCost);
             scanner.close();
-            return;
+        } catch (Exception e) {
+            logger.info("An error occurred. Please try again.");
+            scanner.close();
         }
-
-        logger.info("Order confirmed. Total cost is: $" + totalCost);
-        scanner.close();
     }
+
 }
